@@ -368,10 +368,9 @@ text_sensor:
             return x.c_str();
 # Main house AC mode: off / cool / heat / fan_only / ...
   # Drives the AC Power button's highlighted state (on when not "off")
-  - platform: homeassistant
+- platform: homeassistant
     entity_id: climate.smartzones_main_house
     id: sz_ac_state
-    trigger_on_initial_state: true
     on_value:
       - lvgl.widget.update:
           id: ac_power_button
