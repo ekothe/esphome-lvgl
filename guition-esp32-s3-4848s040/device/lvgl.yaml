@@ -251,7 +251,7 @@ lvgl:
             height: $button_height_single
             width: $button_width
             checkable: false
-            id: blinds_nav_button
+            id: climate_nav_button
             styles: control
             grid_cell_column_pos: 1
             grid_cell_row_pos: 1
@@ -259,12 +259,12 @@ lvgl:
               - label:
                   text_font: $icon_font
                   align: top_left
-                  text: $blinds_closed
+                  text: $aircon
               - label:
                   align: bottom_left
-                  text: "Blinds"
+                  text: "Climate"
             on_click:
-              - lvgl.page.show: blinds_page
+              - lvgl.page.show: climate_page
 
 
         # =========================================================================
