@@ -643,176 +643,176 @@ lvgl:
                     entity_id: light.office_network_rack
     
     - id: climate_page
-          layout:
-            type: flex
-            flex_flow: column_wrap
-          scrollbar_mode: "off"
-          scroll_dir: "hor"
-          width: 100%
-          bg_color: Black
-          bg_opa: cover
-          pad_top: 34
-          pad_bottom: 5
-          pad_left: 5
-          pad_right: 5
-          widgets:
-    
-            # Back to home
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: false
-                id: climate_back_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $chevron_left }
-                  - label: { align: bottom_left, text: "Back" }
-                on_click:
-                  - lvgl.page.show: main_page
-    
-            # Whole-AC power toggle
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: ac_power_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $power }
-                  - label: { align: bottom_left, text: "AC Power" }
-                on_click:
-                  - if:
-                      condition:
-                        lambda: 'return id(sz_ac_state).state != "off";'
-                      then:
-                        - homeassistant.service:
-                            service: climate.turn_off
-                            data: { entity_id: climate.smartzones_main_house }
-                      else:
-                        - homeassistant.service:
-                            service: climate.turn_on
-                            data: { entity_id: climate.smartzones_main_house }
-    
-            # Virtual target (display)
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: false
-                id: sz_target_button
-                styles: control
-                widgets:
-                  - label: { text_font: roboto44_font, align: top_left, id: sz_target_label, text: "--", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Target" }
-    
-            # Target up
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: false
-                id: sz_target_up_button
-                styles: control
-                widgets:
-                  - label: { text_font: roboto44_font, align: top_left, text: "+1°" }
-                  - label: { align: bottom_left, text: "Up" }
-                on_click:
-                  - homeassistant.service:
-                      service: number.set_value
-                      data:
-                        entity_id: number.smartzones_target
-                        value: !lambda |-
-                          if (id(sz_target).has_state()) return id(sz_target).state + 1.0f;
-                          return 0.0f;
-    
-            # Target down
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: false
-                id: sz_target_down_button
-                styles: control
-                widgets:
-                  - label: { text_font: roboto44_font, align: top_left, text: "-1°" }
-                  - label: { align: bottom_left, text: "Down" }
-                on_click:
-                  - homeassistant.service:
-                      service: number.set_value
-                      data:
-                        entity_id: number.smartzones_target
-                        value: !lambda |-
-                          if (id(sz_target).has_state()) return id(sz_target).state - 1.0f;
-                          return 0.0f;
-    
-            # --- Zone toggles (tap to toggle, shows current temp) ---
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: zone_kitchen_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $aircon }
-                  - label: { align: top_right, id: zone_kitchen_temp, text: "--°", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Kitchen" }
-                on_click:
-                  - homeassistant.service:
-                      service: switch.toggle
-                      data: { entity_id: switch.smartzones_virtual_zone_kitchen }
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: zone_playroom_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $aircon }
-                  - label: { align: top_right, id: zone_playroom_temp, text: "--°", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Playroom" }
-                on_click:
-                  - homeassistant.service:
-                      service: switch.toggle
-                      data: { entity_id: switch.smartzones_virtual_zone_playroom }
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: zone_study_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $aircon }
-                  - label: { align: top_right, id: zone_study_temp, text: "--°", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Emily's study" }
-                on_click:
-                  - homeassistant.service:
-                      service: switch.toggle
-                      data: { entity_id: switch.smartzones_virtual_zone_bed_1 }
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: zone_josh_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $aircon }
-                  - label: { align: top_right, id: zone_josh_temp, text: "--°", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Josh" }
-                on_click:
-                  - homeassistant.service:
-                      service: switch.toggle
-                      data: { entity_id: switch.smartzones_virtual_zone_josh }
-            - button:
-                height: $button_height_single
-                width: $button_width
-                checkable: true
-                id: zone_lilly_button
-                styles: control
-                widgets:
-                  - label: { text_font: $icon_font, align: top_left, text: $aircon }
-                  - label: { align: top_right, id: zone_lilly_temp, text: "--°", text_color: 0xFFFFFF }
-                  - label: { align: bottom_left, text: "Lilly" }
-                on_click:
-                  - homeassistant.service:
-                      service: switch.toggle
-                      data: { entity_id: switch.smartzones_virtual_zone_lilly }
+      layout:
+        type: flex
+        flex_flow: column_wrap
+      scrollbar_mode: "off"
+      scroll_dir: "hor"
+      width: 100%
+      bg_color: Black
+      bg_opa: cover
+      pad_top: 34
+      pad_bottom: 5
+      pad_left: 5
+      pad_right: 5
+      widgets:
+
+        # Back to home
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: climate_back_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $chevron_left }
+              - label: { align: bottom_left, text: "Back" }
+            on_click:
+              - lvgl.page.show: main_page
+
+        # Whole-AC power toggle
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: ac_power_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $power }
+              - label: { align: bottom_left, text: "AC Power" }
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return id(sz_ac_state).state != "off";'
+                  then:
+                    - homeassistant.service:
+                        service: climate.turn_off
+                        data: { entity_id: climate.smartzones_main_house }
+                  else:
+                    - homeassistant.service:
+                        service: climate.turn_on
+                        data: { entity_id: climate.smartzones_main_house }
+
+        # Virtual target (display)
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: sz_target_button
+            styles: control
+            widgets:
+              - label: { text_font: roboto44_font, align: top_left, id: sz_target_label, text: "--", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Target" }
+
+        # Target up
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: sz_target_up_button
+            styles: control
+            widgets:
+              - label: { text_font: roboto44_font, align: top_left, text: "+1°" }
+              - label: { align: bottom_left, text: "Up" }
+            on_click:
+              - homeassistant.service:
+                  service: number.set_value
+                  data:
+                    entity_id: number.smartzones_target
+                    value: !lambda |-
+                      if (id(sz_target).has_state()) return id(sz_target).state + 1.0f;
+                      return 0.0f;
+
+        # Target down
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: false
+            id: sz_target_down_button
+            styles: control
+            widgets:
+              - label: { text_font: roboto44_font, align: top_left, text: "-1°" }
+              - label: { align: bottom_left, text: "Down" }
+            on_click:
+              - homeassistant.service:
+                  service: number.set_value
+                  data:
+                    entity_id: number.smartzones_target
+                    value: !lambda |-
+                      if (id(sz_target).has_state()) return id(sz_target).state - 1.0f;
+                      return 0.0f;
+
+        # --- Zone toggles (tap to toggle, shows current temp) ---
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: zone_kitchen_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $aircon }
+              - label: { align: top_right, id: zone_kitchen_temp, text: "--°", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Kitchen" }
+            on_click:
+              - homeassistant.service:
+                  service: switch.toggle
+                  data: { entity_id: switch.smartzones_virtual_zone_kitchen }
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: zone_playroom_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $aircon }
+              - label: { align: top_right, id: zone_playroom_temp, text: "--°", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Playroom" }
+            on_click:
+              - homeassistant.service:
+                  service: switch.toggle
+                  data: { entity_id: switch.smartzones_virtual_zone_playroom }
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: zone_study_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $aircon }
+              - label: { align: top_right, id: zone_study_temp, text: "--°", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Emily's study" }
+            on_click:
+              - homeassistant.service:
+                  service: switch.toggle
+                  data: { entity_id: switch.smartzones_virtual_zone_bed_1 }
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: zone_josh_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $aircon }
+              - label: { align: top_right, id: zone_josh_temp, text: "--°", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Josh" }
+            on_click:
+              - homeassistant.service:
+                  service: switch.toggle
+                  data: { entity_id: switch.smartzones_virtual_zone_josh }
+        - button:
+            height: $button_height_single
+            width: $button_width
+            checkable: true
+            id: zone_lilly_button
+            styles: control
+            widgets:
+              - label: { text_font: $icon_font, align: top_left, text: $aircon }
+              - label: { align: top_right, id: zone_lilly_temp, text: "--°", text_color: 0xFFFFFF }
+              - label: { align: bottom_left, text: "Lilly" }
+            on_click:
+              - homeassistant.service:
+                  service: switch.toggle
+                  data: { entity_id: switch.smartzones_virtual_zone_lilly }
     - id: aircon_page
       layout: 
         type: flex
