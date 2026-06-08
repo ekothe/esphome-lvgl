@@ -249,6 +249,54 @@ sensor:
   # RELATED UI ELEMENT:
   #   lvgl.yaml → heating_lab_target_label, heating_target_arc
   # ===========================================================================
+  # SmartZones virtual target setpoint
+  - platform: homeassistant
+    entity_id: number.smartzones_target
+    id: sz_target
+    on_value:
+      - lvgl.label.update:
+          id: sz_target_label
+          text:
+            format: "%.0f°"
+            args: [ 'x' ]
+
+  # Per-zone "in use" temperatures
+  - platform: homeassistant
+    entity_id: sensor.smartzones_kitchen_temp_in_use
+    id: sz_temp_kitchen
+    on_value:
+      - lvgl.label.update:
+          id: zone_kitchen_temp
+          text: { format: "%.1f°", args: [ 'x' ] }
+  - platform: homeassistant
+    entity_id: sensor.smartzones_playroom_temp_in_use
+    id: sz_temp_playroom
+    on_value:
+      - lvgl.label.update:
+          id: zone_playroom_temp
+          text: { format: "%.1f°", args: [ 'x' ] }
+  - platform: homeassistant
+    entity_id: sensor.smartzones_bed_1_temp_in_use
+    id: sz_temp_study
+    on_value:
+      - lvgl.label.update:
+          id: zone_study_temp
+          text: { format: "%.1f°", args: [ 'x' ] }
+  - platform: homeassistant
+    entity_id: sensor.smartzones_josh_temp_in_use
+    id: sz_temp_josh
+    on_value:
+      - lvgl.label.update:
+          id: zone_josh_temp
+          text: { format: "%.1f°", args: [ 'x' ] }
+  - platform: homeassistant
+    entity_id: sensor.smartzones_lilly_temp_in_use
+    id: sz_temp_lilly
+    on_value:
+      - lvgl.label.update:
+          id: zone_lilly_temp
+          text: { format: "%.1f°", args: [ 'x' ] }
+  
   - platform: homeassistant
     entity_id: climate.office_radiator_thermostat
     id: heating_target_temperature
@@ -318,6 +366,17 @@ text_sensor:
             if (x == "idle") return "Idle";
             if (x == "off") return "Off";
             return x.c_str();
+# Main house AC mode: off / cool / heat / fan_only / ...
+  # Drives the AC Power button's highlighted state (on when not "off")
+  - platform: homeassistant
+    entity_id: climate.smartzones_main_house
+    id: sz_ac_state
+    trigger_on_initial_state: true
+    on_value:
+      - lvgl.widget.update:
+          id: ac_power_button
+          state:
+            checked: !lambda 'return x != "off";'
 
   # ===========================================================================
   # SENSOR: Centauri Carbon Print Progress
@@ -406,6 +465,51 @@ binary_sensor:
           id: office_scene_evening_button
           state:
             checked: !lambda return x;
+  - platform: homeassistant
+    id: sz_zone_kitchen
+    entity_id: switch.smartzones_virtual_zone_kitchen
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        lvgl.widget.update:
+          id: zone_kitchen_button
+          state: { checked: !lambda return x; }
+  - platform: homeassistant
+    id: sz_zone_playroom
+    entity_id: switch.smartzones_virtual_zone_playroom
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        lvgl.widget.update:
+          id: zone_playroom_button
+          state: { checked: !lambda return x; }
+  - platform: homeassistant
+    id: sz_zone_study
+    entity_id: switch.smartzones_virtual_zone_bed_1
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        lvgl.widget.update:
+          id: zone_study_button
+          state: { checked: !lambda return x; }
+  - platform: homeassistant
+    id: sz_zone_josh
+    entity_id: switch.smartzones_virtual_zone_josh
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        lvgl.widget.update:
+          id: zone_josh_button
+          state: { checked: !lambda return x; }
+  - platform: homeassistant
+    id: sz_zone_lilly
+    entity_id: switch.smartzones_virtual_zone_lilly
+    trigger_on_initial_state: true
+    on_state:
+      then:
+        lvgl.widget.update:
+          id: zone_lilly_button
+          state: { checked: !lambda return x; }
 
   # ===========================================================================
   # SENSOR: Office Dimmed Scene Active
